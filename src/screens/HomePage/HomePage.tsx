@@ -37,7 +37,7 @@ export const HomePage = (): JSX.Element => {
       description: "Free box of fries",
       subtitle: "On all orders above",
       price: "Rs.500",
-      image: "public/fries.png",
+      image: "fries.png",
     },
     {
       id: 2,
@@ -45,7 +45,7 @@ export const HomePage = (): JSX.Element => {
       description: "Free box of fries",
       subtitle: "On all orders above",
       price: "Rs.500",
-      image: "public/image.png",
+      image: "image.png",
     },
     {
       id: 3,
@@ -53,7 +53,7 @@ export const HomePage = (): JSX.Element => {
       description: "Free box of fries",
       subtitle: "On all orders above",
       price: "Rs.500",
-      image: "public/image.png",
+      image: "image.png",
     },
   ];
 
@@ -151,12 +151,12 @@ const navItems = [
 
   return (
     <div className="bg-black flex flex-row justify-center w-full min-h-screen">
-      <div className="bg-black overflow-hidden w-[393px] h-[852px] relative">
+<div className="bg-black overflow-hidden w-[393px] h-[852px] relative -mt-12">
         {/* Status Bar */}
         
 
         {/* Header Section */}
-        <header className="absolute w-[325px] h-[103px] top-[68px] left-8">
+        <header className="absolute w-[325px] h-[103px] top-[70px] left-8">
           <h1 className="absolute w-[271px] top-0 left-0 font-['Poppins'] font-semibold text-[#ff9a0e] text-[24px] tracking-[0] leading-[normal]">
             Delicious Bites Restaurant
           </h1>
@@ -169,7 +169,7 @@ const navItems = [
             <img
               className="w-full h-full object-cover"
               alt="Profile"
-              src="/public/avatar.png"
+              src="/avatar.png"
             />
           </div>
         </header>
