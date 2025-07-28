@@ -14,10 +14,10 @@ import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { ScrollArea, ScrollBar } from "../../components/ui/scroll-area";
+import BottomNav from "../../components/ui/Bottomnav";
 
 export const HomePage = (): JSX.Element => {
-  // Active navigation state
-  const [activeNav, setActiveNav] = useState(0);
+  // Active category state
   const [activeCategory, setActiveCategory] = useState(0);
 
   // Category filters data
@@ -73,85 +73,9 @@ export const HomePage = (): JSX.Element => {
     },
   ];
 
-  /* Navigation items data
-  const navItems = [
-    { 
-      icon: <HomeIcon className="w-16 h-6" />, 
-      label: "Home",
-      id: "home"
-    },
-    { 
-      icon: <MessageCircleIcon className="w-6 h-6" />, 
-      label: "Chat",
-      id: "chat"
-    },
-    { 
-      icon: <ShoppingCartIcon className="w-6 h-6" />, 
-      label: "Cart",
-      id: "cart"
-    },
-    { 
-      icon: <MapIcon className="w-6 h-6" />, 
-      label: "Map",
-      id: "map"
-    },
-    { 
-      icon: <BookmarkIcon className="w-6 h-6" />, 
-      label: "Saved",
-      id: "saved"
-    },
-  ];
-
-*/
-const navItems = [
-  { icon: "/home.png", label: "Home", id: "home" },
-  { icon: "/chats.png", label: "Chat", id: "chat" },
-  { icon: "/buying.png", label: "Cart", id: "cart" },
-  { icon: "/journey.png", label: "Map", id: "map" },
-  { icon: "/saved.png", label: "Saved", id: "saved" },
-];
-
-
-
-
-
-  // Handle navigation click
-  const handleNavClick = (index: number, navId: string) => {
-    setActiveNav(index);
-    
-    // Add haptic feedback simulation
-    if (navigator.vibrate) {
-      navigator.vibrate(50);
-    }
-    
-    // You can add navigation logic here
-    console.log(`Navigating to: ${navId}`);
-    
-    // Example: Show different content based on selection
-    switch (navId) {
-      case 'home':
-        // Already on home
-        break;
-      case 'chat':
-        // Navigate to chat
-        break;
-      case 'cart':
-        // Navigate to cart
-        break;
-      case 'map':
-        // Navigate to map
-        break;
-      case 'saved':
-        // Navigate to saved items
-        break;
-      default:
-        break;
-    }
-  };
-
   return (
     <div className="bg-black flex flex-row justify-center w-full min-h-screen">
-<div className="bg-black overflow-hidden w-[393px] h-[852px] relative -mt-12">
+      <div className="bg-black overflow-hidden w-[393px] h-[852px] relative -mt-12">
         {/* Status Bar */}
         
 
@@ -185,7 +109,7 @@ const navItems = [
           </div>
 
           <Button className="absolute w-11 h-12 top-0 left-[279px] bg-[#ff9a0e] rounded-[10px] p-0 hover:bg-[#e68c0d] shadow-md">
-            <img className="w-[20px] h-[20px]" alt="Filter" src="/public/Menu.svg" />
+            <img className="w-[20px] h-[20px]" alt="Filter" src="/Menu.svg" />
           </Button>
         </div>
 
@@ -301,54 +225,15 @@ const navItems = [
           </div>
         </div>
 
-        {/* Bottom Navigation */}
-        <div className="absolute w-[375px] h-[70px] bottom-[30px] left-[9px] bg-[#333333] rounded-[25px] border border-solid border-[#0000001a] shadow-[0px_8px_24px_#00000020] flex justify-around items-center backdrop-blur-sm">
-          {navItems.map((item, index) => (
-            <Button
-              key={index}
-              variant="ghost"
-              size="icon"
-              onClick={() => handleNavClick(index, item.id)}
-              className={`w-full h-full bg-[#FF9B0F] rounded-[20px] shadow-[0px_8px_8px_rgba(0,0,0,0.25)] border border-[rgba(0,0,0,0.18)] transition-all duration-300 transform hover:scale-105 active:scale-95 relative group ${
-                activeNav === index
-                  ? "bg-[#FF9B0F] border border-solid border-[#0000001a] shadow-[0px_4px_12px_#ff9a0e40] hover:bg-[#e68c0d]"
-                  : "bg-transparent hover:bg-gray-600 hover:shadow-md"
-              }`}
-            >
-              {/* Active indicator dot */}
-              {activeNav === index && (
-                <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full animate-pulse"></div>
-              )}
-              
-              {/* Icon container */}
-              
-             <div
-  className={`flex items-center justify-center transition-all duration-200 ${
-    activeNav === index ? "text-white" : "text-white-300 group-hover:text-white"
-  }`}
->
-  <img
-    src={item.icon}
-    alt={item.label}
-    className="w-11 h-11 object-contain"
-  />
-</div>
-
-              
-              {/* Tooltip */}
-              <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-                {item.label}
-              </div>
-            </Button>
-          ))}
-        </div>
-
         {/* Background decorative elements */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute w-[200px] h-[200px] bg-gradient-to-br from-[#FF9B0F20] to-transparent rounded-full -top-20 -right-20"></div>
           <div className="absolute w-[150px] h-[150px] bg-gradient-to-br from-[#FF9B0F10] to-transparent rounded-full bottom-40 -left-20"></div>
         </div>
       </div>
+      
+      {/* Bottom Navigation - positioned outside the main container */}
+      <BottomNav currentPage="home" />
     </div>
   );
 };
