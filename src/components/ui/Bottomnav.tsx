@@ -5,6 +5,7 @@ const navItems = [
   { icon: "/home.png", label: "Home", id: "home" },
   { icon: "/chats.png", label: "Chat", id: "chat" },
   { icon: "/buying.png", label: "Cart", id: "cart" },
+  
   { icon: "/journey.png", label: "Map", id: "map" },
   { icon: "/saved.png", label: "Saved", id: "saved" },
 ];
@@ -19,6 +20,7 @@ const Bottomnav: React.FC<BottomnavProps> = ({ onNavigate, currentPage }) => {
     // Set active nav based on current page
     if (currentPage === 'order') return 2; // Cart index
     if (currentPage === 'chat') return 1; // Chat index
+    if (currentPage === 'cart') return 2; // Cart index
     return 0; // Default to home
   });
 
@@ -43,7 +45,7 @@ const Bottomnav: React.FC<BottomnavProps> = ({ onNavigate, currentPage }) => {
         break;
       case 'cart':
         // Navigate to order page
-        window.location.href = '/order';
+        window.location.href = '/cart';
         break;
       case 'map':
         // Navigate to map
