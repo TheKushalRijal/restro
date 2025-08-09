@@ -74,21 +74,27 @@ useEffect(() => {
     },
   ];
 
+
+
+
+  
   // Popular food items data
 const fallbackPopularItems = [
-    {
-      id: 1,
-      name: "Beef Burger",
-      price: "Rs.250",
-      image: "image.png",
-    },
-    {
-      id: 2,
-      name: "Cheese Pizza",
-      price: "Rs.350",
-      image: "image.png",
-    },
-  ];
+  {
+    id: 1,
+    name: "Beef Burger",
+    price: "Rs.250",
+    image: "image.png",
+    categories: ["Non-Veg"],
+  },
+  {
+    id: 2,
+    name: "Cheese Pizza",
+    price: "Rs.350",
+    image: "image.png",
+    categories: ["Veg", "Dessert"],
+  },
+];
 
   const [promotions, setPromotions] = useState(fallbackPromotions);
 
@@ -122,7 +128,19 @@ const [popularItems, setPopularItems] = useState(fallbackPopularItems);
 
 
 
+// Find the selected category name
+const selectedCategory = categories[activeCategory].name;
 
+// Filter items
+const filteredPopularItems =
+  selectedCategory.toLowerCase() === "all"
+    ? popularItems
+    : popularItems.filter(item =>
+        item.categories &&
+        item.categories.some(cat =>
+          cat.toLowerCase() === selectedCategory.toLowerCase()
+        )
+      );
 
 
   return (
@@ -236,7 +254,7 @@ const [popularItems, setPopularItems] = useState(fallbackPopularItems);
           </h2>
 
           <div className="absolute top-[187px] left-[32px] flex space-x-6">
-            {popularItems.map((item) => (
+              {filteredPopularItems.map((item) => (
               <Card
                 key={item.id}
                 className="w-[151px] h-[195px] bg-[#333333] rounded-[20px] shadow-[0px_6px_12px_#00000020] border-none overflow-hidden cursor-pointer hover:shadow-[0px_8px_16px_#00000030] transition-all duration-300 hover:-translate-y-1"
