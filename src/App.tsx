@@ -14,10 +14,17 @@ function LoadingRedirectWrapper() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check if loading screen has already been shown
+    const hasLoaded = localStorage.getItem("hasLoaded");
+    if (hasLoaded) {
+      navigate('/home');
+      return;
+    }
     const timer = setTimeout(() => {
       setLoading(false);
-      navigate('/home'); // redirect after loading screen
-    }, 2000); // 2 seconds
+      localStorage.setItem("hasLoaded", "true");
+      navigate('/home');
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [navigate]);
@@ -26,6 +33,17 @@ function LoadingRedirectWrapper() {
 }
 
 function App() {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const restaurant = params.get("restaurant");
+    const table = params.get("table");
+    if (restaurant && table) {
+      localStorage.setItem("restaurant", restaurant);
+      localStorage.setItem("table", table);
+    }
+  }, []);
+
+
   return (
     <Router>
       <div className="min-h-screen flex flex-col">

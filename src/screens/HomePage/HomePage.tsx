@@ -8,15 +8,29 @@ import {
   SearchIcon,
   ShoppingCartIcon,
 } from "lucide-react";
-import React, { useState } from "react";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { ScrollArea, ScrollBar } from "../../components/ui/scroll-area";
 import BottomNav from "../../components/ui/Bottomnav";
+import React, { useState, useEffect } from "react";
 
 export const HomePage = (): JSX.Element => {
+/* At the top of HomePage.tsx, inside the component
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const restaurant = params.get("restaurant");
+  const table = params.get("table");
+  if (restaurant && table) {
+    localStorage.setItem("restaurant", restaurant);
+    localStorage.setItem("table", table);
+  }
+}, []);
+
+
+*/
+
   // Active category state
   const [activeCategory, setActiveCategory] = useState(0);
 
@@ -26,16 +40,18 @@ export const HomePage = (): JSX.Element => {
     { name: "Non-Veg" },
     { name: "Veg" },
     { name: "Drink" },
-    { name: "Popular" },
-  ];
+    { name: "Dessert" },];
 
   // Promotion cards data
-  const promotions = [
+  const fallbackPromotions = [
     {
       id: 1,
       title: "Today's Offer",
       description: "Free box of fries",
       subtitle: "On all orders above",
+      
+      
+      
       price: "Rs.500",
       image: "fries.png",
     },
@@ -54,11 +70,12 @@ export const HomePage = (): JSX.Element => {
       subtitle: "On all orders above",
       price: "Rs.500",
       image: "image.png",
+    
     },
   ];
 
   // Popular food items data
-  const popularItems = [
+const fallbackPopularItems = [
     {
       id: 1,
       name: "Beef Burger",
@@ -73,6 +90,41 @@ export const HomePage = (): JSX.Element => {
     },
   ];
 
+  const [promotions, setPromotions] = useState(fallbackPromotions);
+
+
+  useEffect(() => {
+    // Replace with your Django backend API endpoint
+  fetch(`http://localhost:8000/api/promotions/?restaurant=${restaurant}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
+      .then((data) => setPromotions(data))
+      .catch(() => setPromotions(fallbackPromotions));
+  }, []);
+
+
+const restaurant = localStorage.getItem("restaurant") || "DeliciousBites"; // fallback for dev
+const table = localStorage.getItem("table") || "Table 1"; // fallback for dev
+const [popularItems, setPopularItems] = useState(fallbackPopularItems);
+
+ useEffect(() => {
+  // Replace with your Django backend API endpoint for popular items
+  fetch(`http://localhost:8000/api/popular/?restaurant=${restaurant}`)
+    .then((res) => {
+      if (!res.ok) throw new Error("Network response was not ok");
+      return res.json();
+    })
+    .then((data) => setPopularItems(data))
+    .catch(() => setPopularItems(fallbackPopularItems));
+}, []);
+
+
+
+
+
+
   return (
     <div className="bg-black flex flex-row justify-center w-full min-h-screen">
       <div className="bg-black overflow-hidden w-[393px] h-[852px] relative -mt-12">
@@ -80,23 +132,25 @@ export const HomePage = (): JSX.Element => {
         
 
         {/* Header Section */}
-        <header className="absolute w-[325px] h-[103px] top-[70px] left-8">
-          <h1 className="absolute w-[271px] top-0 left-0 font-['Poppins'] font-semibold text-[#ff9a0e] text-[24px] tracking-[0] leading-[normal]">
-            Delicious Bites Restaurant
-          </h1>
-
-          <p className="absolute w-[234px] top-[70px] left-0 font-['Poppins'] font-semibold text-white text-[15px] tracking-[0] leading-[normal]">
-            Order Your Favourite Food !
-          </p>
-
-          <div className="absolute w-20 h-20 top-[13px] left-[245px] rounded-full overflow-hidden border-2 border-[#ff9a0e] shadow-lg">
-            <img
-              className="w-full h-full object-cover"
-              alt="Profile"
-              src="/avatar.png"
-            />
-          </div>
-        </header>
+        
+            <header className="absolute w-[325px] h-[103px] top-[70px] left-8">
+              <h1 className="absolute w-[271px] top-0 left-0 font-['Poppins'] font-semibold text-[#ff9a0e] text-[24px] tracking-[0] leading-[normal]">
+                {restaurant}
+              </h1>
+              <h3 className="absolute top-[35px] left-0 font-['Poppins'] font-medium text-white text-[18px]">
+                Table Number: {table}
+              </h3>
+              <p className="absolute w-[234px] top-[70px] left-0 font-['Poppins'] font-semibold text-white text-[15px] tracking-[0] leading-[normal]">
+                Order Your Favourite Food !
+              </p>
+              <div className="absolute w-20 h-20 top-[13px] left-[270px] rounded-full overflow-hidden border-2 border-[#ff9a0e] shadow-lg">
+                <img
+                  className="w-full h-full object-cover"
+                  alt="Profile"
+                  src="/avatar.png"
+                />
+              </div>
+            </header>
 
         {/* Search Section */}
         <div className="absolute w-[325px] h-12 top-[188px] left-8">
@@ -108,19 +162,19 @@ export const HomePage = (): JSX.Element => {
             />
           </div>
 
-          <Button className="absolute w-11 h-12 top-0 left-[279px] bg-[#ff9a0e] rounded-[10px] p-0 hover:bg-[#e68c0d] shadow-md">
+          <Button className="absolute w-11 h-12 top-0 left-[305px] bg-[#ff9a0e] rounded-[10px] p-0 hover:bg-[#e68c0d] shadow-md">
             <img className="w-[20px] h-[20px]" alt="Filter" src="/Menu.svg" />
           </Button>
         </div>
 
         {/* Category Filters */}
-        <div className="absolute flex space-x-3 top-[257px] left-8 overflow-x-auto scrollbar-hide">
+        <div className="absolute flex space-x-3 top-[257px] left-7 overflow-x-auto scrollbar-hide">
           {categories.map((category, index) => (
             <Badge
               key={index}
               variant="outline"
               onClick={() => setActiveCategory(index)}
-              className={`h-[29px] px-4 py-0.5 rounded-[10px] shadow-[0px_4px_4px_#00000040] whitespace-nowrap ${
+              className={`h-[29px] px-3 py-0.5 rounded-[10px] shadow-[0px_4px_4px_#00000040] whitespace-nowrap ${
                 activeCategory === index
                   ? "bg-[#FF9B0F] text-white border-[#FF9B0F]"
                   : "bg-[#d9d9d9] text-[rgba(0,0,0,0.70)] border-[#d9d9d9]"
